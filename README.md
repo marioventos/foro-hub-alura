@@ -2,7 +2,7 @@
 
 API REST desarrollada con Spring Boot como solución al desafío **Foro Hub** de **Alura**.
 
-Esta aplicación permite gestionar tópicos de un foro mediante operaciones CRUD y autenticación de usuarios utilizando JWT.
+Esta aplicación permite gestionar tópicos de un foro mediante operaciones CRUD y autenticación de usuarios utilizando JWT(JSON Web Token).
 
 ---
 
@@ -11,7 +11,7 @@ Esta aplicación permite gestionar tópicos de un foro mediante operaciones CRUD
 - Java 17
 - Spring Boot
 - Spring Security
-- JWT
+- JWT (Auth0)
 - MySQL
 - Flyway
 - Maven
@@ -24,22 +24,57 @@ La API permite:
 - Registrar nuevos tópicos
 - Listar tópicos
 - Actualizar tópicos
+- Cerrar tópicos
 - Eliminar tópicos
 
 ---
 
-## Endpoints principales
+# Autenticación
 
-### Autenticación
+### Endpoint
 
 POST /login
 
+### Body de la solicitud
+
+```json
+{
+  "login": "usuario",
+  "clave": "password"
+}
+```
+
+### Respuesta
+
+```json
+{
+"token": "jwt_token_generado"
+}
+```
+
+### Uso del token
+
+Una vez obtenido el token, debe enviarse en el header de cada solicitud protegida.
+```bash
+Authorization: Bearer TU_TOKEN
+```
+Ejemplo: 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+#Endpoints
+
 ### Tópicos
 
-POST /topicos  
-GET /topicos  
-PUT /topicos/{id}  
-DELETE /topicos/{id}  
+| Método | Endpoint | Descripción |
+|------|------|------|
+| POST | /topicos | Crear nuevo tópico |
+| GET | /topicos | Listar tópicos |
+| GET | /topicos/{id} | Obtener tópico por id |
+| PUT | /topicos/{id} | Actualizar tópico |
+| PATCH | /topicos/{id}/cerrar | Cerrar un tópico |
+| DELETE | /topicos/{id} | Eliminar tópico |
+
+⚠️ Todos los endpoints requieren autenticación mediante JWT.
 
 ---
 
@@ -51,13 +86,22 @@ DELETE /topicos/{id}
 git clone https://github.com/marioventos/foro-hub-alura.git
 ```
 
-2. Configurar la base de datos en `application.properties`
+2. Configurar la base de datos
+  Editar el archivo:
+  application.properties
+
+  Configurar:
+  - URL de la base de datos
+  - usuario
+  - contraseña
 
 3. Ejecutar el proyecto
 
 ```bash
 mvn spring-boot:run
 ```
+La API estará disponible en:
+http://localhost:8080
 
 ## Autor
 
